@@ -1,0 +1,21 @@
+<div id="main-content" style="position: relative">
+
+    <p style="text-align: center">
+        <h2>Transformation</h2>
+    </p>
+    
+    {% include "modules/selectecg.html" %}
+    {% include "modules/datasources.html" %}
+
+    <div id="headerContainer">
+        <div class="chart-wrapper">
+            <h3>Raw Time Series</h3>
+            <div id="roughChart"></div>
+        </div>
+        <div class="arrow">&#8594;</div>
+        <div class="chart-wrapper">
+            <h3>Reconstruction</h3>
+            <div id="smoothChart"></div>
+        </div>
+    </div>
+</div>

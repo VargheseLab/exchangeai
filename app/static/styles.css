@@ -1,0 +1,500 @@
+/* Basic Styles */
+html, body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    height: 100%;
+}
+em {
+    font-style: normal;
+    color: #c54442;
+}
+
+
+/* Navbar Styles */
+.navbar {
+    background-color: #333333;
+    overflow: auto;
+    z-index: 10;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 20px;
+}
+.navbar ul {
+    list-style-type: none;
+    margin: 5px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar li {
+    margin: 0 15px;
+}
+.navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 1dvh 3dvw;
+    text-decoration: none;
+}
+.navbar li a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+
+/* Slider Button Styles */
+.slider-button button {
+    justify-content: center;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: stretch;
+}
+
+.flex-child {
+    flex: 1;
+}
+
+/* Modals & Container Styles */
+.side-modal {
+    z-index: 5;
+    position: fixed;
+    right: -300px;
+    top: 0;
+    height: 100%;
+    width: 300px;
+    background-color: rgba(241, 241, 241, 0.95);
+    transition: right 0.3s;
+    overflow-y: auto; /* Ermöglicht das Scrollen, wenn der Inhalt zu lang ist */
+    backdrop-filter: blur(3px); 
+}
+.side-modal.active {
+    right: 0;
+}
+.wrap {
+    word-wrap: break-word;
+}
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;  /* Elemente innerhalb von .grid-item zentrieren */
+    width: 100%;          /* Breite auf volle verfügbare Breite setzen */
+    justify-content: center; /* Vertikales Zentrieren, falls benötigt */
+}
+.custom-hr {
+    border: 0;                /* Entfernt den Standard-Border */
+    height: 3px;              /* Erhöht die Höhe des Strichs für mehr Dicke */
+    background-color: #666;  /* Eine hellere Grautönung */
+    width: 80%;               /* Breite von 80% */
+}
+header {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+#headerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+.centered-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+footer {
+    display: block;
+    position: sticky;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 0px;
+    height: 50px;
+}
+
+
+/* Table Styles */
+#myTableContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+table {
+    border-collapse: collapse;
+    width: 60%;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+th, td {
+    border: 1px solid #dcdcdc;
+    text-align: center;
+    padding: 10px 20px;
+}
+th {
+    background-color: #2e2e2e; /* Dunkelgrauer Hintergrund für die Kopfzeile */
+    color: white;
+    font-weight: bold;
+}
+tbody tr:hover {
+    background-color: #f0f0f0; /* Ein leichter Hover-Effekt, um die Zeile hervorzuheben, über die der Benutzer die Maus bewegt */
+}
+
+/* Buttons */
+
+.custom-button {
+    background-color: #f4f4f4; 
+    border: none;
+    color: #141414;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    &:hover {
+        background-color: #e1e1e1; /* Dunkelgrau */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+#ecgFileInputForm div {
+    margin-bottom: 10px; /* Space between each div to create visual separation */
+}
+#ecgFileInputForm span {
+    display: inline-block; /* Ensures span follows block-like behavior */
+    margin-right: 10px; /* Space between span and select/input elements */
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    background-color: #f4f4f4; 
+    border: none;
+    width: 80%;
+    height: 20%;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    /* Für ein modernes Aussehen könnten Sie zusätzliche Effekte hinzufügen, z.B.: */
+    &:hover {
+        background-color: #e1e1e1; /* Dunkelgrau */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.custom-file-upload.disabled {   
+    background-color: #535353; 
+    border: none;
+    width: 80%;
+    height: 20%;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: not-allowed;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+h1 {
+    font-size: 4rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+h3 {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    color: grey;
+    top: -20px;
+    margin-left: 0px;
+}
+
+h4 {
+    font-size: 2rem;
+}
+
+select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    appearance: none; /* Entfernt den Standard-Pfeil von einigen Browsern */
+    -webkit-appearance: none; /* Für Safari und Chrome */
+    -moz-appearance: none; /* Für Firefox */
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align-last: center;
+    text-align: center;
+}
+
+
+
+/* Heart Rate Loading animation **/
+.heart-beat {
+    width: 150px;
+    height: 73px;
+    position: relative;
+    margin: 20px auto;
+}
+
+
+#loadingOverlay .heart-beat {
+    animation: pulse-animation 2s infinite;
+}
+
+#loadingOverlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 99; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    backdrop-filter: blur(10px); 
+}
+#loadingOverlay #overlay-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+  }
+
+@keyframes pulse-animation {
+    0% {
+      scale: 2;
+    }
+    50% {
+      scale: 3;
+    }
+    100% {
+        scale: 2;
+    }
+  }
+
+
+
+select:hover {
+    background-color: #e1e1e1;
+}
+
+select:focus {
+    outline: none;
+    background-color: #e1e1e1;
+}
+
+select::-ms-expand {
+    display: none; /* Entfernt den Standard-Pfeil von IE/Edge */
+}
+
+select::after {
+    content: '\25BC'; /* Unicode für den Pfeil nach unten */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    pointer-events: none;
+}
+
+select:disabled {
+    min-width: 150px;
+    outline: none;
+    background-color: #929292;
+}
+
+
+/* Miscellaneous UI Elements */
+.custom-checkbox {
+    font-family: Arial, sans-serif;
+    position: relative;
+    padding-left: 30px;  /* angepasst aufgrund der kleineren Checkbox-Größe */
+    line-height: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkbox-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border-width: 2px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+.custom-checkbox:hover input ~ .checkbox-icon {
+    background-color: #ccc;
+}
+.custom-checkbox input:checked ~ .checkbox-icon {
+    background-color: #2196F3;
+}
+.checkbox-icon:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 9px;
+    top: 5px;
+    width: 7px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+.custom-checkbox input:checked ~ .checkbox-icon:after {
+    display: block;
+}
+.warning-message {
+    display: none;
+    font-size: 20px;
+    text-align: center;
+    padding: 50px;
+}
+#warningP {
+    color: orange;
+    text-align: center;
+    font-size: 30px;
+}
+
+
+/* Media Queries */
+@media (max-width: 1600px) {
+    #headerContainer {
+        display: none; /* Hauptinhalt verstecken */
+    }
+    #warningMessage {
+        display: block; /* Warnmeldung anzeigen */
+    }
+}
+
+#finetuningContent {
+    display: block;
+}
+
+
+#dataAndConditionSelect {
+    position: absolute; top: 50px; right: 10px;
+    display: block;
+}
+
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 20; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    backdrop-filter: blur(10px); 
+}
+.overlay-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+  }
+
+#overlay-custom{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+
+#custom_sampling_rate::-webkit-outer-spin-button,
+#custom_sampling_rate::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#custom_sampling_rate {
+    -moz-appearance: textfield;
+    text-align: center;
+}
+
+.inline-svg {
+    height: 1em;
+}

@@ -1,0 +1,109 @@
+<div class="side-modal" id="sideModal">
+    <div class="grid-container">
+        <div class="grid-item">
+            <h3>Data</h3>
+            <label class="custom-file-upload">
+                <form enctype="multipart/form-data" id="ecgFileInputForm">
+                    <input type="file" id="ecgFileInput" name="ecgFileInput" accept=".csv, .npy, .dcm, .dat, .mat, .xml" multiple oninput="uploadFiles(); showLoadingScreen();">
+                    <div>
+                        <span>Sampling rate:</span>
+                        <select id="sampling_rate" name="sampling_rate" onchange="toggleCustomSamplingRate(this)" onload="toggleCustomSamplingRate(this)">
+                            <option value="100">100hz</option>
+                            <option value="500" selected>500hz</option>
+                            <option value="custom">Custom</option>
+                            <input type="number" id="custom_sampling_rate" name="custom_sampling_rate" placeholder="257" style="display:none;" min="0" max="2500"/>
+                        </select>
+                    </div>
+                    <div>
+                        <span>ADC gain:</span>
+                        <select id="adc_gain" name="adc_gain">
+                            <option value="200">200/mV</option>
+                            <option value="1000" selected>1000/mV</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>Lead layout (I-III ... V1-V6):</span> 
+                        <select id="lead_layout" name="lead_layout">
+                            <option value="leads_default" selected>aVR, aVL, aVF</option>
+                            <option value="leads_mimic">aVR, aVF, aVL</option>
+                        </select>
+                    </div>
+                </form>
+                <script>
+                    function toggleCustomSamplingRate(select) {
+                        var customInput = document.getElementById('custom_sampling_rate');
+                        if(select.value === 'custom') {
+                            customInput.style.display = 'inline';
+                            customInput.required = true;
+                        } else {
+                            customInput.style.display = 'none';
+                            customInput.required = false;
+                        }
+                    }
+                </script>
+                    
+            </label>
+            <label class="custom-file-upload">
+                <strong>Upload Labels (optional)</strong>
+                <form action="{{ url_for('upload_labels') }}" method="post" enctype="multipart/form-data" id="ecgLabelsInputForm">
+                    <input type="file" name="labelsFileInput" accept=".csv" onchange="document.getElementById('ecgLabelsInputForm').submit()">
+                </form>
+            </label>
+
+            <button id="modelExChanGe" onclick="showLoadingScreen(); openOverlay('webdav', disallow_exit=true); fillWebDav();" class="custom-modal-button">
+                Model {% include 'modules/template.html' %}
+            </button>
+            {% include 'modules/webdav.html' %}
+
+        </div>
+        <div class="grid-item">
+        <hr class="custom-hr">
+        </div>
+        <div class="grid-item">
+            <h3>Summary</h3>
+            <label><span name="ecgCount"></span> imported ECGs</label>
+            <label><span name="labelCount"></span> imported Labels</label>
+            <button id="clearLoadedData" onclick="confirmAction('/clear_loaded_data')">Clear loaded Data</button>
+            <script>
+                fetch('/loaded_data_statistics')
+                .then((resp) => resp.json())
+                .then((resp) => {
+                    const ecgCounts = document.getElementsByName('ecgCount');
+                    const labelsCounts = document.getElementsByName('labelCount');
+
+                    ecgCounts.forEach( (div) => { div.innerHTML = resp.ecgs;})
+                    labelsCounts.forEach( (div) => { div.innerHTML = resp.labels;})
+
+                })
+            </script>
+        </div>
+        <div class="grid-item">
+            <hr class="custom-hr">
+        </div>
+        <div class="grid-item">
+            <h3>Export</h3>
+            <form action="{{ url_for('export') }}" method="post" enctype="multipart/form-data" id="exportForm" target="_blank">
+                {% include "modules/datasources.html" %}
+                <select name="exportFormat" id="exportFormat">
+                    <option value="json">json</option>
+                    <option value="csv">csv</option>
+                </select>
+                <button type="submit" id="exportData" class="custom-button">Export ECGs</button>
+            </form>
+        </div>
+    </div>
+
+    {% if LOCKDOWN_DEMO %}
+        <script>
+            Array.from(document.getElementsByTagName('input')).forEach(function (it) {
+                it.disabled=true;
+            })
+            Array.from(document.getElementsByClassName('custom-file-upload')).forEach(function(it){
+                it.classList.add("disabled");
+            })
+            document.getElementById("sampling_rate").disabled=true;
+            document.getElementById("adc_gain").disabled=true;
+            document.getElementById("lead_layout").disabled=true;
+        </script>
+    {% endif %}
+</div>

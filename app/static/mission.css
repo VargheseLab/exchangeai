@@ -1,0 +1,41 @@
+#mission-content {
+    width: 80%;
+    height: 80%;
+    margin-bottom: 50px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+strong {
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li:not(nav) {
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 16px;
+    margin-left: 10px;
+    text-align: left;
+}
+
+li:not(nav li):before {
+    content: "•";
+    color: #c54442;
+    display: inline-block;
+    width: 20px;
+    margin-left: 0px;
+}

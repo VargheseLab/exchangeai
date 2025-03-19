@@ -1,0 +1,7 @@
+prediction_models:
+  - 
+training_models:
+  - XceptionTime_untrained.onnx
+  - InceptionTime_untrained.onnx
+exchange_models:
+  -

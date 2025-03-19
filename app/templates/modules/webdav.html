@@ -1,0 +1,33 @@
+<div id="webdav" style="display: none;">
+    <div id="webdav-body">
+        <div id="webdav-main">
+
+            <div class="tab-container">
+                <button id="prediction_models-button" class="tab-button" onclick="showTab('prediction_models')">Prediction</button>
+                <button id="training_models-button" class="tab-button" onclick="showTab('training_models')">Training</button>
+                <button id="exchange_models-button" class="tab-button" onclick="showTab('exchange_models')">{% include 'modules/template.html' %}</button>
+                <!-- <button id="exchange_models-settings-button" class="button" onclick="openSettingsPopup()" style="background-color: gray;">{% include 'modules/settings_icon.html' %}</button>-->
+                <label id="external_models-button" class="tab-button" style="display: inline-block; font-weight: normal;">
+                    Load external Models
+                    <form action="{{ url_for('upload_models') }}" method="post" enctype="multipart/form-data" id="predictionModelsInputForm">
+                        <input type="file" name="predictionModelsInput" accept=".onnx" multiple onchange="document.getElementById('predictionModelsInputForm').submit()">
+                    </form>
+                </label>
+            </div>
+            <input type="text" id="search-input" placeholder="Search files..." oninput="searchFiles()">
+            
+            <div id="file-list"></div>
+            <button onclick="closeOverlay();" id="webdavCancelButon">Cancel</button>
+            <button onclick="saveSelectedModels(); closeOverlay();" id="webdavSaveButon">Save</button>
+        </div>
+  </div>
+</div>
+<script>
+    function openSettingsPopup() {
+        document.getElementById('settingsPopup').style.display = 'block';
+    }
+
+    function closeSettingsPopup() {
+        document.getElementById('settingsPopup').style.display = 'none';
+    }
+</script>

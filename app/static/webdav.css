@@ -1,0 +1,115 @@
+#webdav-body {
+    display: block;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    z-index: 10;
+    width: 100dvh;
+    overflow-y: auto;
+    border-radius: 8px;
+    outline: 2px solid #333; /* Define border for better visibility */
+}
+
+#webdav-main {
+    background-color: #33333380;
+    font-size: medium;
+    padding: 20px;
+    width: inherit;
+    box-sizing: border-box;
+}
+
+#webdav-main > .custom-file-upload {
+    padding: 10px;
+    margin: 10px;
+    width: 45%;
+    box-sizing: border-box;
+}
+
+#search-input {
+    padding: 10px;
+    margin: 10px;
+    width: 95%;
+    box-sizing: border-box;
+}
+
+.tab-button {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: gray;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    width: 45%; /* Two columns */
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+}
+
+label >.tab-button{
+    font-weight: normal;
+    display: none;
+} 
+
+.tab-button.active {
+    background-color: #4caf4f; /* Highlight active tab */
+}
+  
+#tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+#webdavSaveButon, #webdavCancelButon {
+    padding: 10px;
+    width: 45%; /* Full width button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+#webdavSaveButon {
+    background-color: #4CAF50;
+}
+#webdavCancelButon {
+    background-color: #696969;
+}
+
+#webdav-main > .custom-file-upload {
+    height: unset;
+}
+
+#overlay-custom > .file-item > span{
+    font-size: 16px;
+}
+
+
+
+#file-list {
+    overflow-y: scroll;
+    max-height: 40vh;
+    border: 1px solid #ccc; /* Slight border for better visibility */
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.file-item {
+    padding: 5px;
+    cursor: pointer;
+    display: flex;  /* Make items align horizontally */
+    align-items: center; /* Center checkbox vertically with text */
+}
+
+.file-item:hover {
+    background-color: #4caf4f34; /* Hover effect for file items */
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="64" height="64" rx="8" ry="8" fill="#007bff"/>
+    <polyline fill="none" stroke="#ffffff" stroke-width="2" stroke-miterlimit="10" points="
+        0,35.54 
+        15.37,35.54 
+        17.79,25.96 
+        20.22,35.54 
+        22.95,35.54 
+        24.98,43.44 
+        28.6,7.02 
+        31.85,50 
+        33.45,35.54 
+        38.68,35.54 
+        41.11,31.55 
+        43.97,35.54 
+        59.19,35.54" 
+    />
+</svg>

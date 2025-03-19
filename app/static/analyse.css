@@ -1,0 +1,27 @@
+#main-content {
+    width: 98%;  /* Set width to almost 100% to leave a small margin on both sides */
+    height: 98%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#myChartContainer {
+    width: 100%;
+    height: 70%;
+    margin-top: 75px;
+}
+
+#ecg-chart{
+    height: 100%;
+}
+
+.chart-container {
+    display: flex;
+    align-items: center;
+}
+
+
+#predictionResultContainer table {
+    width: 70%;
+    margin: auto;
+}

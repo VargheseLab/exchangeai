@@ -1,0 +1,36 @@
+<div id="main-content" style="position: relative">
+    
+    <p style="text-align: center">
+        <h2>Finetuning</h2>
+    </p>
+
+    <div id="finetuningContent">
+    <label for="modelName">
+        Custom model name:
+        <div id="modelName">{{model_name}}</div>
+    </label>
+    <p id="progressContainer">
+        Progress: <progress value="0" id="progressBar"></progress>
+        <div id="progress_animation">{% include "modules/heartbeat_animation.html" %}</div>
+        <label for="logList" style="visibility: hidden;">
+            Logs:
+            <ul id="logList" style="height: 200px; overflow-x: hidden; overflow-y: auto; width: max-content;"></ul>
+        </label>
+    </p>
+    <button onclick="confirmAction('/abort_finetune')">Interrupt Finetuning</button>
+    </div>
+    <script>
+
+        const modelName = document.getElementById("modelName").innerText;
+        const progressBar = document.getElementById("progressBar");
+        
+        if ({{ show_logs | tojson }}){
+            const logList = document.getElementById("logList");
+            if (logList.parentElement.style.visibility == 'hidden') {
+                logList.parentElement.style.visibility = 'visible'
+            }
+        }
+
+    </script>
+</div>
+

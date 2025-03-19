@@ -1,0 +1,26 @@
+<div id="main-content" style="position: relative">
+
+    <div id="dataAndConditionSelect">
+        {% include "modules/conditionselect.html" %}
+    </div>
+
+
+    <p style="text-align: center">
+        <h2>Explainable AI</h2>
+        We use Rlign [CITE] to use machine learning models based on explainable classifiers.
+    </p>
+
+    {% include "modules/selectecg.html" %}
+
+    
+    <div style="margin: 2%;">
+        <label for="predictionResultContainer" id="predictionResultContainerLabel" >
+            Prediction:
+            <div id="predictionResultContainer">
+                <b>Select a prediction model to show a detailed analysis.</b>
+            </div>
+        </label>
+        {% include "modules/dataset_predictions.html" %}
+    </div>
+   
+</div>

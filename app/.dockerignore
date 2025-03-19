@@ -1,0 +1,9 @@
+.env
+
+training_artifacts/*
+exchange_models/*/*
+!exchange_models/configuration.yml
+
+.git
+.cache
+**/__pycache__/*

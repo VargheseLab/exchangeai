@@ -1,0 +1,38 @@
+
+FROM redis:7.4-bookworm
+
+RUN apt-get update && \
+    apt-get install -yq python3.11 python3-pip build-essential python3-dev && \
+    rm -rf /var/lib/apt/lists/*
+COPY requirements/requirements.txt requirements.txt
+RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary \
+    -r requirements.txt --break-system-packages
+
+# Set Environment variables
+ENV FINETUNE_DISABLED=True
+
+# Copy ExChanGe
+WORKDIR /app
+
+VOLUME /app/exchange_models
+
+COPY static/ /app/static
+COPY templates/ /app/templates
+COPY server_init.py server_init.py
+COPY default_models.yml default_models.yml
+COPY startup.sh startup.sh
+COPY uwsgi.ini uwsgi.ini
+
+COPY models/ /app/models
+COPY training_models/ /app/training_models
+COPY exchange_models/configuration.yml /app/exchange_models/configuration.yml
+
+COPY utils/ /app/utils
+COPY utils_finetuning/ /app/utils_finetuning
+COPY model_definitions/ /app/model_definitions
+COPY main.py main.py
+
+RUN chmod +x startup.sh
+
+EXPOSE 8000
+CMD ["./startup.sh"]

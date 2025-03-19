@@ -1,0 +1,135 @@
+#finetuningContent {
+    display: block;
+    margin: 0 auto;
+    text-align: left;
+    max-width: 80%;
+    padding: 10px;
+}
+
+#labelStatistics {
+    height: 20%;
+    min-height: 10%;
+    margin: auto;
+}
+
+#explanation li {
+    color: white;
+}
+
+progress {
+    color: #c54442;
+}
+
+/* Heart Rate animation **/
+.heart-beat {
+    width: 150px;
+    height: 73px;
+    position: relative;
+    margin: 20px;
+    scale: 2;
+}
+#progress_animation .fade-in {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    animation: heartBeatIn 4s linear infinite;
+    background:linear-gradient(to left,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(255, 255, 255, 0) 100%
+    );
+}
+#progress_animation .fade-out {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    animation: heartBeatOut 4s linear infinite;
+    background: rgba(255, 255, 255, 1);
+}
+@keyframes heartBeatIn {
+    0% {
+      width: 100%;
+    }
+    50% {
+      width: 0;
+    }
+    100% {
+      width: 0;
+    }
+}
+   
+@keyframes heartBeatOut {
+    0% {
+        opacity: 0;
+    }
+    70% {
+        opacity: 0;
+    }
+    95% {
+        opacity: 1;
+    }
+}
+
+
+
+/* Style the labels and input fields */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 20%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="number"] {
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style the checkbox */
+#consentContent {
+    display: block;
+    padding: 5px;
+    max-width: 95%;
+    font-style: italic;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+/* Style the progress bar container */
+#progressContainer {
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}
+
+/* Style the progress bar */
+#progressBar {
+    width: 100%;
+    height: 20px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* Style the progress text */
+#progressBar span {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+progress::-moz-progress-bar { background: #c54442; }
+progress::-webkit-progress-value { background: #c54442; }
+progress { color: #c54442; }

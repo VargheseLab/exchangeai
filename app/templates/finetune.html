@@ -1,0 +1,93 @@
+<div id="main-content" style="position: relative">
+    <p style="text-align: center">
+        <h2>Finetuning</h2>
+    </p>
+
+    <div id="finetuningContent">
+        <div class="flex-container">
+        <div class="flex-child">
+            {% include "modules/conditionselect.html" %}
+            <label for="train_method">
+                Training Method 
+                <button class="custom-button" onclick="openOverlay('finetuning_explanations')">&quest;</button>:
+                {% include 'modules/finetuning_explanations.html' %}
+                <select id="train_method">
+                    <option>Finetuning (classification head)</option>
+                    <option>Finetuning (all layers)</option>
+                    <!-- <option>Scratch</option> -->
+                </select>
+            </label>
+            
+            <label for="modelName">
+                Custom model name:
+                <input type="text" id="modelName" minlength="3" maxlength="50" required>
+            </label>
+            <!-- {% include "modules/consent.html" %} -->
+            <button class="custom-button" onclick="toggleAdvancedSettings()">Advanced Settings</button>
+            <div style="visibility: hidden;" id="AdvancedSettings">
+                <label for="AdvancedSettingsLR">
+                    Maximal initial learning-rate:
+                    <input id="AdvancedSettingsLR" type="number" min="0.0000001" max="0.01" value="0.01" step="0.0000005"/>
+                </label>
+                <label for="AdvancedSettingsLR">
+                    Batch size:
+                    <input id="AdvancedSettingsBatchSize" type="number" min="1" max="128" value="4" step="1"/>
+                </label>
+                <label for="AdvancedSettingsEpochs">
+                    Number of epochs:
+                    <input id="AdvancedSettingsEpochs" type="number" min="10" max="1000" value="50" step="1" />
+                </label>
+                <label for="AdvancedSettingsScheduler">
+                    LR-scheduler gamma:
+                    <input id="AdvancedSettingsScheduler" type="number" min="0.1" max="0.99" value="0.9" step="0.01"/>
+                </label>
+                <label for="showLogs">
+                    Show logs:
+                    <input id="showLogs" type="checkbox" value="0" />
+                </label>
+            </div>
+        </div>
+        <div class="flex-child">
+            <label for="dataset_analytics">
+                Dataset Analytics:
+            </label>
+                <div id="dataset_analytics">
+                    Number of imported ECGs: <span name="ecgCount"></span><br>
+                    Number of imported Labels: <span name="labelCount"></span>
+                </div>
+            
+            <div id="labelStatistics" style="visibility: hidden; margin: auto; height: 80%"></div>
+        </div>
+    </div>
+        <script>
+            fetch('/loaded_label_statistics')
+            .then( resp => resp.json())
+            .then( resp => {
+                const labelStatistics = document.getElementById('labelStatistics');
+                if (labelStatistics) {
+                    if (Object.keys(resp.data).length > 0){
+                        Plotly.newPlot('labelStatistics', resp);
+                        labelStatistics.style.visibility = 'visible'
+                    } else {
+                        labelStatistics.style.visibility = 'hidden'
+                    }
+                }
+            })
+        </script>
+        <br><br>
+    <form>
+        <button type="button" onclick="startFinetuning()" id="startFinetuningButton" class="custom-button">Start finetuning</button>
+    </form>
+    </div>
+    <script>
+        function toggleAdvancedSettings() {
+            var advancedSettings = document.getElementById('AdvancedSettings');
+            if (advancedSettings.style.visibility == 'visible'){
+                advancedSettings.style.visibility = 'hidden';
+            } else {
+                advancedSettings.style.visibility = 'visible';
+            }
+        }
+    </script>
+</div>
+

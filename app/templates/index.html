@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+        <link rel="icon" href="{{ url_for('static', filename='icon.svg') }}" type="image/svg+xml">
+
+        <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+
+        <title>ExChanGeAI</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='analyse.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='prediction.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='mission.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='finetune.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='webdav.css') }}">
+
+        <script src="{{ url_for('static', filename='script.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='script_charts.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='script_data.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='webdav.js') }}" type="text/javascript"></script>
+        
+        {% if not FINETUNE_DISABLED %}
+        <script> 
+            function createSSEConnection() {
+                const eventSource = new EventSource('/task_status');
+
+                eventSource.onopen = function(){
+                    console.log("Connected")
+                };
+
+                eventSource.onerror = function() {
+                    console.log('Error occurred, attempting to reconnect...');
+                    eventSource.close();
+                };
+
+                eventSource.onclose = function() {
+                    console.log('connect...');
+                    setTimeout(createSSEConnection, 3000);
+                };
+
+                eventSource.onmessage = function(event) {
+                    let data = JSON.parse(event.data);
+
+                    if (data.ping != undefined){
+                        return
+                    }
+
+                    if (data.data != undefined){
+                        data = data.data
+                    } else {
+                        const state = data.status
+                        if (state == 'SUCCESS') {
+                            download_file_url = data.result
+                            model_name = data.model_name
+                            download_finetuned_model(model_name, download_file_url)
+                            eventSource.close()
+                        }
+                    }
+
+                    if (data.progress !== undefined) {
+                        const progress_val = parseFloat(data.progress)
+                        if (!isNaN(progress_val)) {
+                            progressBar.value = progress_val;
+                        }
+                    }
+
+                    if (data.logs !== undefined) {
+                        data.logs.forEach(log => {
+                            const li = document.createElement("li");
+                            li.textContent = log;
+                            logList.appendChild(li);
+                        });
+                        logList.scrollTop = logList.scrollHeight;
+                    }
+
+                
+                }
+            }
+            document.addEventListener('DOMContentLoaded', () => {
+                createSSEConnection();
+            });
+
+
+            document.addEventListener('keydown', function(event) {
+                
+                if (event.ctrlKey && event.key === 's') {
+                    // open side modal
+                    event.preventDefault();
+                    openModal();
+                } else if (event.ctrlKey && event.key === 'm') {
+                    // open model modal
+                    event.preventDefault(); 
+                    let isOpen = openOverlay('webdav', disallow_exit=true);
+                    
+                    if (!isOpen) {
+                        showLoadingScreen();
+                        fillWebDav();
+                    } else {
+                        closeOverlay();
+
+                    }
+
+                } else if (event.ctrlKey && event.key === 'c') {
+                    // clear loaded data
+                    event.preventDefault(); 
+                    document.getElementById('clearLoadedData').click();
+                } else if (event.ctrlKey && event.key === 'l') {
+                    // upload labels
+                    event.preventDefault(); 
+                    document.getElementById('ecgLabelsInputForm').click();
+                } else if (event.ctrlKey && event.key === 'd') {
+                    // upload data
+                    event.preventDefault(); 
+                    document.getElementById('ecgFileInputForm').click();
+                }
+            })
+        </script>
+        {% endif %}
+    </head>
+    <body>
+        <div id="loadingOverlay" style="display: none;">
+            <div class="overlay-text">{% include "modules/heartbeat_animation.html"%}</div>
+        </div>
+        <header>
+            <nav class="navbar" id="myNavBar">
+                <ul>
+                    <!--<button onclick="openModal()">Data Selection</button>-->
+                    <li><a href="/">
+                        <img src="{{ url_for('static', filename='icon.svg') }}" type="image/svg+xml" class="inline-svg">{% include "modules/template.html" %}
+                    </a></li>
+                    <li><a href="{{ url_for('analyse') }}">Analyse</a></li>
+                    <li><a href="{{ url_for('predict') }}">Predict</a></li>
+                    {% if not FINETUNE_DISABLED %}
+                    <li><a href="{{ url_for('finetune') }}" disabled>Finetune</a></li>
+                    {% endif %}
+                    <!-- <li><a href="{{ url_for('explainable') }}">XAI</a></li> -->
+                    <!-- <li><a href="{{ url_for('project') }}">Our Mission</a></li> -->
+
+                    <li class="slider-button">
+                        <button onclick="openModal()" class="custom-modal-button">
+                            {% include "modules/side_modal_icon.html" %}
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div id="overlay" onclick="closeOverlay()">
+            <div id="overlay-text" class="overlay-text">
+                <!-- This is an overlay text for some excpetion raising -->
+            </div>
+            <div id="overlay-custom">
+            </div>
+        </div> 
+        {% include "modules/side-modal.html" %}
+        <div class="warning-message" id="warningMessage">
+            <h1>{% include "modules/template.html" %}</h1>
+            <p id="warningP">This page is not optimized for your device size.</p>
+        </div>
+        <div id="headerContainer">
+            {% if not content %}
+            <h2>No text to show</h2>
+            {% else %}
+            {{ content }}
+            {% endif %}
+        </div>
+        <footer>
+            <nav class="navbar" id="myNavBar">
+                <ul>
+                    <li><a target="_blank" href="https://imigitlab.uni-muenster.de/published/exchangeai">GitLab</a></li>
+                    <li></li><a target="_blank" href="https://arxiv.org/abs/2503.13570">Paper</a></li>
+                    {% if DISCLAIMER %}
+                    <li><a target="_blank" href="https://www.medizin.uni-muenster.de/imi/impressum.html">Legal Disclosure</a></li>
+                    {% endif %}
+                </ul>
+                {% if DISCLAIMER %}
+                    <br>
+                    <p style="color: #c54442; overflow: hidden;">Nur ausschliesslich Testdaten hochladen. Dieses Produkt ist nicht nach Medizinproduktegesetz (MPG) zertifiziert und somit nicht zur Befundung geeignet.</p>
+                {% endif %}
+            </nav>
+        </footer>
+    </body>
+</html>

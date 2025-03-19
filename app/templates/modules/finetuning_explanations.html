@@ -1,0 +1,21 @@
+<div id="finetuning_explanations" style="display: none;">
+    <div style="display: flex; flex-direction: row; gap: 2%">
+        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px;">
+            <h4 style="margin-top: 0;">Finetuning (all layers)</h4>
+            <ul id="explanation">
+                <li>Trains all layers</li>
+                <li>Leverages Feature extraction from base model, but can finetune this process as well</li>
+                <li>Slower, but more accurate</li>
+            </ul>
+            
+        </div>
+        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; max-width: 300px;">
+            <h4 style="margin-top: 0;">Finetuning (classification head)</h4>
+            <ul id="explanation">
+                <li>Trains only the top layers (classification heads)</li>
+                <li>Based on Feature extraction from base model</li>
+                <li>Faster, but less accurate and depends on the extracted features</li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<label for="conditionSelect">
+    Select AI model: <select id="conditionSelect" onchange="updatePrediction(this.value);"></select>
+    <script>
+        fetch('/availableModels')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('conditionSelect');
+            const option = document.createElement('option');
+            option.value = 'noModel';
+            option.text = 'No model';
+            select.appendChild(option);
+
+            if (data.length > 0) {
+                select.disabled = false;
+                data.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.text = opt;
+                    select.appendChild(option);
+                });
+            }
+            select.selectedIndex = 0;
+        });
+        
+    </script>
+</label>

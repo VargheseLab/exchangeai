@@ -1,0 +1,7 @@
+# This should not contain sensitive data!
+# ReadOnly!
+exchange_name: default
+remote_adress: 'https://uni-muenster.sciebo.de/public.php/webdav/'
+auth:
+  username: "dyCKLW5Xiiem7sa"
+  password: ""

@@ -1,0 +1,6 @@
+
+FROM python:3.11-slim
+
+# Install Requirements
+COPY optional-requirements.txt optional-requirements.txt
+RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary --target /pip-packages -r optional-requirements.txt

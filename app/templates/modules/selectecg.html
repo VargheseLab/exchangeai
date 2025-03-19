@@ -1,0 +1,40 @@
+<label for="selectECG">
+    Select single ECG:
+    <select id="selectECG" onchange="updateChart({'selectECG': this.value});"></select>
+    
+    <script>
+        fetch('/names_ecgs_loaded')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('selectECG');
+            if (data.length > 0) {
+                select.disabled = false;
+                data.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.text = opt;
+                    select.appendChild(option);
+                });
+                select.selectedIndex = -1;
+            } else {
+                select.disabled = true;
+                const option = document.createElement('option');
+                option.text = 'No data';
+                select.appendChild(option);
+            }
+        });
+
+        const selectElement = document.getElementById('selectECG')
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                selectElement.selectedIndex = Math.min(selectElement.selectedIndex + 1, selectElement.options.length - 1);
+                selectElement.dispatchEvent(new Event('change'));
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                selectElement.selectedIndex = Math.max(selectElement.selectedIndex - 1, 0);
+                selectElement.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+</label>
