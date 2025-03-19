@@ -1,6 +1,6 @@
-FROM imidocker.uni-muenster.de/machine-learning/exchange/optional_requirements:latest AS optional_requirements
+FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/optional_requirements:latest AS optional_requirements
 
-FROM imidocker.uni-muenster.de/machine-learning/exchange/lite:latest
+FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/lite:latest
 ENV FINETUNE_DISABLED=False
 
 WORKDIR /app
