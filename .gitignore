@@ -1,0 +1,31 @@
+# local stuff
+**training_artifacts**
+**_finetuned.onnx
+**.onnx
+**.zip
+**.json
+EcgCopyData*/*
+**models/*
+app/models/*
+app/exchange_models/*
+app/training_models/*
+docker-compose.yml
+certs/*
+default.conf
+app/example_data/*
+
+# generic stuff
+__pycache__/
+*.pyc
+*.whl 
+.vscode/*
+*.env
+*.dcm
+*.dat
+*tmp*
+*test*
+*.gz
+*report_dynamo_export.*
+.vscode
+*.pth
+**flask_session*

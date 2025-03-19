@@ -1,0 +1,57 @@
+stages:
+  - build
+
+
+default:
+  image: docker:27
+  services:
+    - docker:27-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - cd app
+  tags:
+    - dind27
+
+
+.builder:
+  script:
+    - VERSION="$CI_COMMIT_REF_NAME"
+    - if [[ "${VERSION}" == "main" || "${VERSION}" == "development" ]]; then VERSION="latest"; fi
+    - cd $FOLDER
+    - echo "Building $FOLDER"
+    - docker pull ${CI_REGISTRY_IMAGE}/${TAG}:latest || true
+    - docker pull ${CI_REGISTRY_IMAGE}/${TAG}:${VERSION} || true
+    - docker build --pull --cache-from ${CI_REGISTRY_IMAGE}/${TAG}:latest --cache-from ${CI_REGISTRY_IMAGE}/${TAG}:${VERSION} -t ${CI_REGISTRY_IMAGE}/${TAG}:${VERSION} --build-arg BUILDKIT_INLINE_CACHE=1 -f $DOCKERFILE .
+    - docker push $CI_REGISTRY_IMAGE/${TAG}:${VERSION}
+    - echo "Docker Build complete." 
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "development"
+    - when: manual
+
+builder-1:
+  extends: .builder
+  stage: build
+  variables:
+    FOLDER: requirements
+    TAG: optional_requirements
+    DOCKERFILE: Dockerfile.optional_requirements
+
+builder-2:
+  extends: .builder
+  stage: build
+  variables:
+    FOLDER: .
+    TAG: lite
+    DOCKERFILE: Dockerfile.lite
+
+builder-3:
+  extends: .builder
+  stage: build
+  variables:
+    FOLDER: .
+    TAG: full
+    DOCKERFILE: Dockerfile
+  needs:
+    - job: builder-1
+    - job: builder-2
