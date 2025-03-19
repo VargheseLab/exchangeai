@@ -7,3 +7,4 @@ llvmlite
 numpy<=1.26.3 #unresolved bug in 1.6.4, some package not ready for 2.0
 pandas>=2.2
 matplotlib>=3.9
+transformers
