@@ -3,6 +3,8 @@
 </h1>
 ExChanGeAI is an open-source, user-friendly ECG analysis framework. Features include visualization, data transformation, prediction, and model fine-tuning with user datasets. No prior machine learning expertise needed. Deployable via Docker, its ensures data privacy on local hardware. Packed with pretrained models for quick finetuning.
 
+Visit [https://exchange-ai.uni-muenster.de](https://exchange-ai.uni-muenster.de), for an installation free demo version.
+
 ## Quickstart
 ### Installation
 Install the end-to-end platform: [Installation](Installation.md).
