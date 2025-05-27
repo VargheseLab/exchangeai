@@ -1,12 +1,10 @@
 from typing import List
 
-import numpy as np
 from polars import (DataFrame)
 import plotly.express as px
 import plotly.graph_objects as go
 from flask import jsonify
 from plotly.subplots import make_subplots
-from pyparsing import str_type
 from sklearn.metrics import confusion_matrix, f1_score
 
 
@@ -226,15 +224,15 @@ def plot_prediction_histogram(
         )
 
         # Add text annotations
-        for i in range(cm.shape[0]):
-            for j in range(cm.shape[1]):
-                fig.add_annotation(
-                    text=np.round(cm[i, j], 2),
-                    x=j,
-                    y=i,
-                    showarrow=False,
-                    font=dict(color="black", size=15),
-                )
+        #for i in range(cm.shape[0]):
+        #    for j in range(cm.shape[1]):
+        #        fig.add_annotation(
+        #            text=np.round(cm[i, j], 2),
+        #            x=j,
+        #            y=i,
+        #            showarrow=False,
+        #            font=dict(color="black", size=15),
+        #        )
 
         fig.update_layout(
             autosize = True,

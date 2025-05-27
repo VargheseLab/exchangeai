@@ -1,10 +1,10 @@
 # These are only required for the full version
-torch<=2.2
+torch<=2.7
 onnx2torch>=1.5.15
 #tsai>=0.3.9 # for untrained XceptionTime Pytorch model
-onnxruntime_extensions>=0.13
+onnxruntime_extensions>=0.14
 llvmlite
-numpy<=1.26.3 #unresolved bug in 1.6.4, some package not ready for 2.0
+#numpy<=1.26.3 #unresolved bug in 1.6.4, some package not ready for 2.0
 pandas>=2.2
-matplotlib>=3.9
+#matplotlib>=3.10
 transformers

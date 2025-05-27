@@ -1,5 +1,5 @@
 
-FROM redis:7.4-bookworm
+FROM redis:8.0-bookworm
 
 RUN apt-get update && \
     apt-get install -yq python3.11 python3-pip build-essential python3-dev && \

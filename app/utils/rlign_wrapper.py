@@ -2,7 +2,7 @@
 import numpy as np
 from polars import (DataFrame, Float32)
 
-from rlign import Rlign, Template
+from rlign import Rlign
 
 
 class Rlign_wrapper():
