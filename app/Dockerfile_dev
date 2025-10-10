@@ -1,17 +1,22 @@
-
 FROM redis:8.0-bookworm
 
+# Install Requirements
 RUN apt-get update && \
     apt-get install -yq python3.11 python3-pip build-essential python3-dev && \
     rm -rf /var/lib/apt/lists/*
+
 COPY requirements/requirements.txt requirements.txt
+COPY requirements/optional-requirements.txt optional-requirements.txt
 
 RUN pip install --upgrade pip --break-system-packages
 RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary \
     -r requirements.txt --break-system-packages
+RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary \
+    -r optional-requirements.txt --break-system-packages
+
 
 # Set Environment variables
-ENV FINETUNE_DISABLED=True
+ENV FINETUNE_DISABLED=False
 
 # Copy ExChanGe
 WORKDIR /app

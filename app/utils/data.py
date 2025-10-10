@@ -124,8 +124,8 @@ class ECGData(ECGData_Dummy):
     def available_training_models(self) -> List[str]:
         checked_models = json.loads(self.selected_model_list.get("selected_model_list"))
 
-        training_models = [m for m in checked_models['training_models'] if m is not None and m.endswith(".onnx")]
-        exchange_models = [f"*{m}" for m in checked_models['exchange_models'] if m is not None and m.endswith(".onnx")]
+        training_models = [m for m in checked_models['training_models'] if m is not None] # and m.endswith(".onnx")]
+        exchange_models = [f"*{m}" for m in checked_models['exchange_models'] if m is not None] #and m.endswith(".onnx")]
 
         all_checked_models = [*training_models, *exchange_models]
 
@@ -315,12 +315,12 @@ class ECGData(ECGData_Dummy):
         except Exception as e:
             logging.warning(e)
     
-    def prediction_statistics(self, prediction_model, exchange_name="default", xai=False, session_key=None) -> dict[str, str]:
+    def prediction_statistics(self, prediction_model, exchange_name="default", get_class=False, xai=False, session_key=None) -> DataFrame:
         # generate hash and check if existing
         if self.loaded_ecgs.is_empty(session_key=session_key):
             return DataFrame()
         
-        prediction_model_data_hash = md5(prediction_model.encode()).hexdigest() + self.loaded_ecgs.compute_hash(session_key=session_key)
+        prediction_model_data_hash = md5(str(get_class).encode()).hexdigest() + md5(prediction_model.encode()).hexdigest() + self.loaded_ecgs.compute_hash(session_key=session_key)
         statistics = self.loaded_prediction_statistics.get(prediction_model_data_hash, session_key=session_key)
 
         if statistics is not None:
@@ -332,7 +332,7 @@ class ECGData(ECGData_Dummy):
                 prediction_model=prediction_model,
                 names=self.names(session_key=session_key),
                 xai=xai,
-                get_class=True,
+                get_class=get_class,
                 session_key=session_key,
                 exchange_name=exchange_name
             )
@@ -387,21 +387,20 @@ def run_prediction_model(
     xai: bool = False,
     session_key = None,
     batch_size=32,
-    get_class=False,
+    get_class: bool = False,
     exchange_name="default"
 ) -> DataFrame:
     
-    def predict_ecg(batched_names, get_class=False, prediction_model=None, session_key=session_key, exchange_name="default"):
-        ft = run_prediction_task.delay(batched_names, get_class=get_class, prediction_model=prediction_model, xai=xai, session_key=session_key, exchange_name=exchange_name)
+    def predict_ecg(batched_names, get_class_, prediction_model=None, session_key=session_key, exchange_name="default"):
+        ft = run_prediction_task.delay(batched_names, get_class=get_class_, prediction_model=prediction_model, xai=xai, session_key=session_key, exchange_name=exchange_name)
         return ft
     
     predictions = {}
-    futures = [predict_ecg(batch, get_class=get_class, prediction_model=prediction_model, session_key=session_key, exchange_name=exchange_name) for batch in batch_list(names, batch_size=batch_size)]
+    futures = [predict_ecg(batch, get_class_=get_class, prediction_model=prediction_model, session_key=session_key, exchange_name=exchange_name) for batch in batch_list(names, batch_size=batch_size)]
     for ft in futures:
         if isinstance(ft, list):
             for f in ft:
                 predictions.update( f.get() )
         else:
             predictions.update( ft.get() )
-        
     return DataFrame(predictions)

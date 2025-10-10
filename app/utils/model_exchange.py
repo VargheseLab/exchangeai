@@ -22,7 +22,7 @@ class ModelExchange():
                 logging.warning("Model Exchange Configuration could not be loaded!")
 
         self.initiate_client()
-        self.update_model_exchange()
+        #self.update_model_exchange()
 
     def get_exchange_name(self):
         return self.exchange_name

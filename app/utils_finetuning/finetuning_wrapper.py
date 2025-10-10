@@ -19,6 +19,7 @@ class FinetuneWrapper(Task):
         base_model: str,
         model_name: str,
         train_method,
+        optimizer,
         epochs,
         lr,
         lr_gamma,
@@ -43,6 +44,7 @@ class FinetuneWrapper(Task):
             "stats": {
                 'model_name': model_name,
                 'base_model': base_model,
+                'optimizer': optimizer,
                 'label_stats': label_stats,
                 'label_stats_icd10': label_stats_icd10,
                 'data_stats': data_stats,
@@ -66,6 +68,7 @@ class FinetuneWrapper(Task):
                 task_id = task_id,
                 train_method = train_method,
                 num_epochs = int(epochs),
+                optimizer = str(optimizer),
                 lr = float(lr),
                 lr_gamma = float(lr_gamma),
                 batch_size = int(batchsize),

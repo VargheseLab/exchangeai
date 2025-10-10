@@ -5,7 +5,7 @@ from typing import Any, List, Union
 from werkzeug.utils import secure_filename
 import numpy as np
 from onnxruntime import (get_available_providers, InferenceSession, SessionOptions)
-from onnxruntime.capi.onnxruntime_pybind11_state import SessionOptions
+#from onnxruntime.capi.onnxruntime_pybind11_state import SessionOptions
 from polars import (DataFrame)
 from utils.util_functions import ecg_normalize, softmax
 
@@ -120,16 +120,21 @@ class ONNX_Runtimes():
             data = np.transpose(data, axes=(0,2,1))
        
         try:
-            outputs = self.prediction_session.run(None, {self.prediction_input_name: data})[0]
+            outputs_logits = self.prediction_session.run(None, {self.prediction_input_name: data})[0]
+            
             if not xai:
-                outputs = np.apply_along_axis(softmax, axis=-1, arr=outputs)
+                outputs = np.apply_along_axis(softmax, axis=-1, arr=outputs_logits)
                 if get_class:
                     return list(self.classes[np.argmax(outputs, axis=-1)])
                 else:
-                    return {self.classes[idx]: str(round(o, 3)) for idx, o in enumerate(outputs[0])}
+                    return [
+                        {self.classes[idx]: str(round(o, 3)) for idx, o in enumerate(sample_probs)}
+                        for sample_probs in outputs
+                    ]
+                    #return {self.classes[idx]: str(round(o, 3)) for idx, o in enumerate(outputs[0])}
             else:
                 #SVM directly predicts!
-                return list(outputs)
+                return list(outputs_logits)
         except Exception as e:
             logging.warning(f'Failure to predict and map to classes: {e}')
             return None

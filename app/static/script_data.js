@@ -52,6 +52,7 @@ async function startFinetuning(){
 
     document.getElementById("startFinetuningButton").disabled = true;
 
+    const optimizer = document.getElementById("AdvancedSettingsOptimizer").value;
     const lr = document.getElementById("AdvancedSettingsLR").value;
     const lr_gamma = document.getElementById("AdvancedSettingsScheduler").value;
     const batchsize = document.getElementById("AdvancedSettingsBatchSize").value;
@@ -64,6 +65,7 @@ async function startFinetuning(){
             'base_model': baseModel,
             'model_name': modelName,
             'train_method': trainMethod,
+            'optimizer': optimizer,
             'lr': lr,
             'lr_gamma': lr_gamma,
             'batchsize': batchsize,

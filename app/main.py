@@ -208,7 +208,7 @@ def prediction_process(session_key=None):
             session_key=session_key,
             exchange_name=webdav_client.get_exchange_name()
         )
-        return jsonify(prediction.get())
+        return jsonify(prediction.get()[0])
     return jsonify({})
     
 
@@ -228,13 +228,50 @@ def prediction_statistics(referrer=None, session_key=None):
     data = json.loads(request.data.decode('utf-8'))
     prediction_model = data.get("prediction")
     as_plot = bool(data.get("as_plot"))
+    view = data.get("view", "distribution")
 
-    predictions = ecg_data.prediction_statistics(prediction_model, xai=(referrer == 'explainable'), session_key=session_key, exchange_name=webdav_client.get_exchange_name())
+    
 
     if as_plot:
-        return plot_prediction_histogram(predictions, prediction_model, ecg_data.get_all_labels(session_key=session_key))
+        if view == 'roc':
+            predictions = ecg_data.prediction_statistics(
+                prediction_model,
+                get_class=False,
+                xai=(referrer == 'explainable'),
+                session_key=session_key,
+                exchange_name=webdav_client.get_exchange_name()
+            )
+            labels = ecg_data.get_all_labels(session_key=session_key)
+            class_names = labels["label"].unique().to_list()
+
+            predictions = predictions.transpose(include_header=True, header_name="ECG", column_names=None)
+            predictions = DataFrame(
+                [
+                    {"ECG": file_name, **class_probs}
+                    for file_name, class_probs in predictions.iter_rows()
+                ]
+            )
+
+            return plot_prediction_roc(predictions, prediction_model, labels, class_names=class_names)
+        else:
+            predictions = ecg_data.prediction_statistics(
+                prediction_model,
+                get_class=True,
+                xai=(referrer == 'explainable'),
+                session_key=session_key,
+                exchange_name=webdav_client.get_exchange_name()
+            )
+            return plot_prediction_histogram(predictions, prediction_model, ecg_data.get_all_labels(session_key=session_key))
     else:
-        predictions = predictions.transpose(include_header=True, header_name="ECG", column_names=["Prediction"])
+        predictions = ecg_data.prediction_statistics(prediction_model, get_class=False, xai=(referrer == 'explainable'), session_key=session_key, exchange_name=webdav_client.get_exchange_name())
+        predictions = predictions.transpose(include_header=True, header_name="ECG", column_names=None)
+        predictions = DataFrame(
+            [
+                {"ECG": file_name, **class_probs}
+                for file_name, class_probs in predictions.iter_rows()
+            ]
+        )
+        
         predictions = jsonify({"export": predictions.write_csv()})
         response = make_response(predictions)
         response.headers['Content-Disposition'] = f'attachment;filename={prediction_model}.csv'
@@ -471,6 +508,7 @@ def run_finetune(session_key=None):
     base_model = data.get('base_model')
     model_name = data.get('model_name')
     train_method = data.get('train_method')
+    optimizer = data.get('optimizer')
     lr = data.get('lr')
     lr_gamma = data.get('lr_gamma')
     batchsize = data.get('batchsize')
@@ -488,6 +526,7 @@ def run_finetune(session_key=None):
                 base_model,
                 model_name,
                 train_method,
+                optimizer,
                 epochs,
                 lr,
                 lr_gamma,

@@ -1,6 +1,3 @@
-
-
-
 // chart functions
 function updateChart(caller_value) {
     let referrer = window.location.href.split('/');
@@ -81,7 +78,7 @@ async function updateAnalyseChart(ecgSelection, transform) {
 
 function plotPredictionStatistics() {
     let referrer = window.location.href.split('/');
-    referrer = referrer[referrer.length -1];
+    referrer = referrer[referrer.length -1 ];
 
     const parentDOMs = document.getElementById('dataAndConditionSelect')?.getElementsByTagName('select')
     const predictionCondition = parentDOMs.namedItem('conditionSelect').value;
@@ -90,7 +87,6 @@ function plotPredictionStatistics() {
         return;
     }
     
-
     showLoadingScreen()
 
     config = {
@@ -102,7 +98,7 @@ function plotPredictionStatistics() {
         }
     }
 
-    getPredictionStatistics(predictionCondition, true)
+    getPredictionStatistics(predictionCondition, true, 'distribution')
     .then( resp => {
         const predictionStatistics = document.getElementById('overlay-custom');
 
@@ -110,15 +106,17 @@ function plotPredictionStatistics() {
             if (Object.keys(resp.data).length > 0){
                 Plotly.newPlot('overlay-custom', resp.data, resp.layout, config);
             }
+
             hideLoadingScreen()
             openOverlay()
         }
     })
 }
 
-function downloadPredictionStatistics() {
+
+function plotPredictionROC() {
     let referrer = window.location.href.split('/');
-    referrer = referrer[referrer.length -1];
+    referrer = referrer[referrer.length -1 ];
 
     const parentDOMs = document.getElementById('dataAndConditionSelect')?.getElementsByTagName('select')
     const predictionCondition = parentDOMs.namedItem('conditionSelect').value;
@@ -127,6 +125,46 @@ function downloadPredictionStatistics() {
         return;
     }
     
+    showLoadingScreen()
+
+    const config = {
+        'toImageButtonOptions': {
+          'format': 'svg',
+          'filename': predictionCondition,
+          'height': null,
+          'width': null
+        }
+    }
+
+    getPredictionStatistics(predictionCondition, true, 'roc')
+    .then( resp => {
+        const predictionStatistics = document.getElementById('overlay-custom');
+      
+        if (predictionStatistics) {
+            if (Object.keys(resp.data).length > 0){
+                Plotly.newPlot('overlay-custom', resp.data, resp.layout, config);
+            }
+
+            hideLoadingScreen()
+            openOverlay()
+        }
+
+        hideLoadingScreen()
+        openOverlay()
+    })
+}
+
+function downloadPredictionStatistics() {
+    let referrer = window.location.href.split('/');
+    referrer = referrer[referrer.length -1 ];
+
+    const parentDOMs = document.getElementById('dataAndConditionSelect')?.getElementsByTagName('select')
+    const predictionCondition = parentDOMs.namedItem('conditionSelect').value;
+
+    if (predictionCondition.match('noModel')) {
+        return;
+    }
+
     showLoadingScreen()
     getPredictionStatistics(predictionCondition, false)
     .then( resp => {
@@ -142,21 +180,23 @@ function downloadPredictionStatistics() {
 }
 
 
-async function getPredictionStatistics(predictionCondition, as_plot){
-    body = new Blob([JSON.stringify({'as_plot': as_plot, 'prediction': predictionCondition})], {type: "application/json"})
-    
-    return fetch('/prediction_statistics', {
+async function getPredictionStatistics(predictionCondition, as_plot, view='distribution'){
+    const resp = await fetch('/prediction_statistics', {
         method: 'POST',
         headers: { 'Content-Type': 'text/json' },
-        body: body
+        body: JSON.stringify({'as_plot': as_plot, 'prediction': predictionCondition, 'view': view})
     })
-    .then( resp => resp.json())
+    .then( resp => resp.json() )
+
+    return resp
 }
+
+
 
 // prediction
 async function updatePrediction(predictionCondition) {
     let referrer = window.location.href.split('/');
-    referrer = referrer[referrer.length -1];
+    referrer = referrer[referrer.length -1 ];
     let target = '/prediction'
     let explainable = false
 
@@ -180,6 +220,19 @@ async function updatePrediction(predictionCondition) {
     const predictionResultLabel = document.getElementById('predictionResultContainerLabel');
     document.getElementsByName('dataset_predictions').forEach((x) => {x.disabled = false});
 
+    try {
+        const statsResp = await fetch('/loaded_data_statistics', { method: 'GET' });
+        if (statsResp.ok) {
+            const stats = await statsResp.json();
+            const labels_loaded = (stats && typeof stats.labels === 'number' && stats.labels > 0);
+            if (labels_loaded) {
+                document.getElementsByName('dataset_predictions_with_labels').forEach((x) => { x.disabled = false; });
+            }
+        }
+    } catch (e) {
+        console.warn('Failed to check loaded labels', e);
+    }
+    
     body = new Blob([JSON.stringify({'ecg': ecgSelection, 'prediction': predictionCondition})], {type: "application/json"})
     const prediction = await fetch(target, {
         method: "POST",

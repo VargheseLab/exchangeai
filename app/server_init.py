@@ -13,6 +13,7 @@ from utils.data import ECGData
 
 # load environment
 FINETUNE_DISABLED = os.environ.get('FINETUNE_DISABLED', "False").lower() in ('true', '1', 't')
+SAMPLING_RATE = int(os.environ.get('SAMPLING_RATE', 100))
 DISCLAIMER = os.environ.get('DISCLAIMER', "False").lower() in ('true', '1', 't')
 LOCKDOWN_DEMO = os.environ.get('LOCKDOWN_DEMO', "False").lower() in ('true', '1', 't')
 
@@ -91,7 +92,7 @@ redis_client = None
 finetune_wrapper_task = None
 #some startup
 ecg_data = ECGData(
-    target_sampling_rate = 100
+    target_sampling_rate = SAMPLING_RATE
 )
 
 @celery.task

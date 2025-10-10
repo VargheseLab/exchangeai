@@ -1,6 +1,9 @@
 <label for="dataset_predictions">
+    <button name="dataset_predictions_with_labels" onclick="plotPredictionROC()" disabled>
+        ROC Analysis
+    </button>
     <button name="dataset_predictions" onclick="plotPredictionStatistics()" disabled>
-        Generate Dataset Predictions
+        Distribution/Confusion Matrix
     </button>
     <button name="dataset_predictions" onclick="downloadPredictionStatistics()" disabled>
         Download Dataset Predictions

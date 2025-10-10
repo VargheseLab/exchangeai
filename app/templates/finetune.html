@@ -25,6 +25,18 @@
             <!-- {% include "modules/consent.html" %} -->
             <button class="custom-button" onclick="toggleAdvancedSettings()">Advanced Settings</button>
             <div style="visibility: hidden;" id="AdvancedSettings">
+                <label for="AdvancedSettingsOptimizer">
+                    Optimizer:
+                    <select id="AdvancedSettingsOptimizer" list="AdvancedSettingsOptimizerList"/>
+                        <option value="AdamW">AdamW</option>
+                        <option value="Adam">Adam</option>
+                        <option value="NAdam">NAdam</option>
+                        <option value="Adamax">Adamax</option>
+                        <option value="Adafactor">Adafactor</option>
+                        <option value="SGD">SGD</option>
+                        <option value="RMSprop">RMSprop</option>
+                    </select>
+                </label>
                 <label for="AdvancedSettingsLR">
                     Maximal initial learning-rate:
                     <input id="AdvancedSettingsLR" type="number" min="0.0000001" max="0.01" value="0.01" step="0.0000005"/>

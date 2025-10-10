@@ -15,7 +15,7 @@ from onnxruntime_extensions import get_library_path as _lib_path
 from onnx2torch import convert
 
 import redis
-from torch.optim import AdamW
+from torch.optim import AdamW, SGD, Adam, Adamax, NAdam, Adafactor, RMSprop
 from torch.optim.lr_scheduler import ExponentialLR
 from torch.cuda import device_count, is_available
 from torch import (argmax, enable_grad, no_grad, tensor)
@@ -63,6 +63,7 @@ class Finetune():
         train_method: str,
         exchange_name: str,
         num_epochs: int = 100,
+        optimizer: str = "AdamW",
         batch_size: int = 8,
         lr: float = 1e-3,
         lr_gamma: float = 0.8,
@@ -74,6 +75,7 @@ class Finetune():
         self.initialize_stats()
         self._stop_event = Event()
         self.lr = lr
+        self.optimizer = optimizer
         self.task_id = task_id
         self.device = 'cuda' if is_available() else 'cpu'
         self._log_message(f"Training on {self.device}!")
@@ -170,7 +172,25 @@ class Finetune():
                 self._log_message(f"Running DataParallel on {cuda_device_count} CUDA devices.")
                 self.model = DataParallel(self.model)
 
-        self.optimizer = AdamW(self.model.parameters(), lr=self.lr)
+        self._log_message(f"Using {self.optimizer} optimizer.")
+        match self.optimizer:
+            case "AdamW":
+                self.optimizer = AdamW(self.model.parameters(), lr=self.lr)
+            case "Adam":
+                self.optimizer = Adam(self.model.parameters(), lr=self.lr)
+            case "NAdam":
+                self.optimizer = NAdam(self.model.parameters(), lr=self.lr)
+            case "Adamax":
+                self.optimizer = Adamax(self.model.parameters(), lr=self.lr)
+            case "Adafactor":
+                self.optimizer = Adafactor(self.model.parameters(), lr=self.lr)
+            case "RMSprop":
+                self.optimizer = RMSprop(self.model.parameters(), lr=self.lr)
+            case "SGD":
+                self.optimizer = SGD(self.model.parameters(), lr=self.lr)
+            case _:
+                self._log_message("Unknown Optimizer, using default AdamW.")
+                self.optimizer = AdamW(self.model.parameters(), lr=self.lr)
         self.scheduler = ExponentialLR(self.optimizer, gamma=lr_gamma)
         
         self._log_message("Start finetune")
@@ -183,7 +203,10 @@ class Finetune():
         epoch_eps = 10
         min_delta_epoch = 10
 
+        import time
+        
         for epoch in range(self.num_epochs):
+            start_time = time.perf_counter() 
             # interrupt thread
             if self._stop_event.is_set(): 
                 logging.warning("Interrupting Thread!")
@@ -214,6 +237,8 @@ class Finetune():
 
             #self.queue.appendleft(epoch / self.num_epochs)
             self.redis_client.publish(f"{self.task_id}:progress", f"{(epoch + 1) / self.num_epochs}")
+            end_time = time.perf_counter()
+            self.stats[f'train_time_epoch_{epoch + 1}'] = end_time - start_time
 
         if os.path.exists(f'{self.artifact_dir}/{model_name}_chkpt.pth'):
             #shutil.copy(f'{self.artifact_dir}/{model_name}_chkpt.pth', f'{self.artifact_dir}/{model_name}.pth')
@@ -226,7 +251,7 @@ class Finetune():
             export2onnx(model, model_name, prediction_keys, self.sampling_rate, standardizer)
         else:
             logging.warning("No finetuned model generated, please retry!")
-        
+
         self.redis_client.publish(f"{self.task_id}:progress", f"{1.0}")
         self.redis_client.close()
         return self.stats
