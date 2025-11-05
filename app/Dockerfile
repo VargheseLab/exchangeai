@@ -1,6 +1,8 @@
-FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/optional_requirements:latest AS optional_requirements
+#FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/optional_requirements:latest AS optional_requirements
+FROM ghcr.io/vargheselab/exchangeai/optional_requirements AS optional_requirements
+#FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/lite:latest
+FROM ghcr.io/vargheselab/exchangeai/lite
 
-FROM imidocker.uni-muenster.de/published/exchangeai/exchangeai/lite:latest
 ENV FINETUNE_DISABLED=False
 
 WORKDIR /app
