@@ -12,6 +12,8 @@ Install the end-to-end platform: [Installation](Installation.md).
 ### Getting Started
 See a full introduction [here](Getting_Started.md).
 
+Example data is available in this repository under [example_data.zip](example_data.zip).
+
 You can upload data and labels on the side modal, and select or upload models on the model exchange. The side modal is accesible via top right menu, and the model exchange under `Model ExChanGe`.
 The `Model ExChanGe` contains local (Prediction, Training) and downloaded, external models are available under <span style="color: #c54442;">E</span>x<span style="color: #c54442;">C</span>han<span style="color: #c54442;">G</span>e. The models are marked with an "*" for easier differentiation. 
 
