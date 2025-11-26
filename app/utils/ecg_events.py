@@ -54,6 +54,7 @@ class ECGEvents():
     def run_events(self,
         data: DataFrame
     ) -> DataFrame:
+        data = data.interpolate()
         events = ecg_process(
             data[:, self.ecg_channel],
             sampling_rate=self.sampling_rate

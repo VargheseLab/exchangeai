@@ -135,6 +135,11 @@ def export2onnx(
     meta2 = onnx_model.metadata_props.add()
     meta2.key = "standardizer"
     meta2.value = str(standardizer)
+
+    meta3 = onnx_model.metadata_props.add()
+    meta3.key = "sampling_rate"
+    meta3.value = str(sampling_rate)
+
     onnx.save(onnx_model, f'models/{model_name}.onnx')
 
 

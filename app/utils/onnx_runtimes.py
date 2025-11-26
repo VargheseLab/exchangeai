@@ -23,7 +23,8 @@ class ONNX_Runtimes():
         self.training_model_path = training_model_path
         self.prediction_session_model = ''
         self.sampling_rate = sampling_rate
-        self.standardizer = None
+        self.sampling_rate_overwrite = None
+        self.standardizer = 100 #default 100hz models
         self.scale = "milliVolt"
 
         self.sess_options = SessionOptions()
@@ -81,6 +82,10 @@ class ONNX_Runtimes():
 
             try: self.scale = self.prediction_session.get_modelmeta().custom_metadata_map.get('scale', "milliVolt")
             except Exception as e: self.scale = "milliVolt"
+
+            try: self.sampling_rate_overwrite = int(self.prediction_session.get_modelmeta().custom_metadata_map.get('sampling_rate', 100))
+            except Exception as e: self.sampling_rate_overwrite = self.sampling_rate
+            logging.warning(self.sampling_rate_overwrite)
     
     def run_prediction(
         self,
@@ -97,7 +102,7 @@ class ONNX_Runtimes():
         if not xai:
             data = ecg_normalize(
                 data,
-                sampling_rate = self.sampling_rate,
+                sampling_rate = self.sampling_rate_overwrite,
                 trend_removal ="movingMedian",
                 standardizer = self.standardizer,
                 scale = self.scale

@@ -31,6 +31,8 @@ from .torch_modifier import TorchModifier
 from .customConverters import *
 from model_definitions import *
 
+SAMPLING_RATE = int(os.environ.get('SAMPLING_RATE', 100))
+
 class Finetune():
     def __init__(self, sampling_rate: int = 500) -> None:
         self.stats = {}
@@ -134,12 +136,17 @@ class Finetune():
         except Exception: standardizer = None
         try: scale = self.model.scale
         except Exception: scale = "milliVolt"
+        try: self.sampling_rate_overwrite = int(self.model.sampling_rate)
+        except Exception: 
+            if "untrained" in base_model or "DSAIL" in base_model: self.sampling_rate_overwrite = SAMPLING_RATE
+            else: self.sampling_rate_overwrite = 100
+
         self.train_loader, self.eval_loader, self.class_weight = generate_loaders(
                                                                         self.data,
                                                                         self.labels,
                                                                         prediction_keys,
                                                                         device=self.device,
-                                                                        sampling_rate=self.sampling_rate,
+                                                                        sampling_rate=self.sampling_rate_overwrite,
                                                                         standardizer=standardizer,
                                                                         scale=scale
                                                                     )
@@ -248,7 +255,7 @@ class Finetune():
             except AttributeError:
                 model = self.model
             model.load_state_dict(state_dict)
-            export2onnx(model, model_name, prediction_keys, self.sampling_rate, standardizer)
+            export2onnx(model, model_name, prediction_keys, self.sampling_rate_overwrite, standardizer)
         else:
             logging.warning("No finetuned model generated, please retry!")
 

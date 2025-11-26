@@ -1,3 +1,5 @@
+import logging
+import os
 from typing import List, Union
 import numpy as np
 from polars import (DataFrame, read_parquet)
@@ -6,6 +8,8 @@ from pandas import Series
 from scipy.signal import resample
 from scipy.ndimage import median_filter
 import io
+
+SAMPLING_RATE = int(os.environ.get('SAMPLING_RATE', 100))
 
 def serialize(data):
     if isinstance(data, DataFrame):
@@ -92,6 +96,8 @@ def ecg_normalize(
     if isinstance(data, DataFrame):
         data = data.to_numpy()
 
+    if sampling_rate != SAMPLING_RATE:
+        data = resample_multichannel(data, SAMPLING_RATE, sampling_rate)
     
     if data.shape[0] > data.shape[1]:
         data = data.transpose(1,0)

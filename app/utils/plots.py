@@ -88,7 +88,7 @@ def plot_RlignMedianBeats(data: DataFrame) -> str:
     data = data.transpose()
     data.columns = header
     fig = px.line(
-        data_frame=data,
+        data_frame=data.to_pandas(),
     )
     fig.update_layout(
         plot_bgcolor="#FFDADA"
@@ -124,7 +124,7 @@ def plot_events(data: DataFrame) -> str:
     """
 
     fig = px.scatter(
-        data_frame=data[:, data.columns[1:]],
+        data_frame=data[:, data.columns[1:]].to_pandas(),
         labels = {'x': '', 'y': ''}
     )
     index = data.with_row_index()['index']

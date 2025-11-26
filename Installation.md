@@ -25,10 +25,19 @@ Either you clone this repository and run it with the local server, or you can us
 ```
 2. Open http://127.0.0.1:8000/ with your Browser
 
-### Lite version
+
+### Configuration:
+
+#### Lite version
 Just pull the lite version `exchangeai/lite` which does not support finetuning, but its package size is smaller and supports all other major functions.
 
-### GPU Acceleration (Nvidia only)
+#### Sampling rate
+You can change the default unified sampling rate via the environment variable SAMPLING_RATE. For for Docker Desktop, you find these under the Optional settings.
+```
+docker run -it --rm -p 8080:8000 -e SAMPLING_RATE=500 ...
+```
+
+#### GPU Acceleration (Nvidia only)
 If you have a Nvidia GPU you can accelerate finetuning. Please install 
 [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) and use the following command to start the container:
 

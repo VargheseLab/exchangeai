@@ -10,9 +10,9 @@ COPY requirements/optional-requirements.txt optional-requirements.txt
 
 RUN pip install --upgrade pip --break-system-packages
 RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary \
-    -r requirements.txt --break-system-packages
+    -r optional-requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu --break-system-packages
 RUN pip install --disable-pip-version-check --no-cache-dir --prefer-binary \
-    -r optional-requirements.txt --break-system-packages
+    -r requirements.txt --break-system-packages
 
 
 # Set Environment variables
@@ -33,6 +33,7 @@ COPY uwsgi.ini uwsgi.ini
 COPY models/ /app/models
 COPY training_models/ /app/training_models
 COPY exchange_models/configuration.yml /app/exchange_models/configuration.yml
+COPY exchange_models/ /app/exchange_models
 
 COPY utils/ /app/utils
 COPY utils_finetuning/ /app/utils_finetuning
