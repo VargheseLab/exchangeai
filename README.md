@@ -14,6 +14,7 @@ See a full introduction [here](Getting_Started.md).
 
 Example data is available in this repository under [example_data.zip](example_data.zip).
 
+Example data is available in this repository under [example_data.zip](example_data.zip).
 You can upload data and labels on the side modal, and select or upload models on the model exchange. The side modal is accesible via top right menu, and the model exchange under `Model ExChanGe`.
 The `Model ExChanGe` contains local (Prediction, Training) and downloaded, external models are available under <span style="color: #c54442;">E</span>x<span style="color: #c54442;">C</span>han<span style="color: #c54442;">G</span>e. The models are marked with an "*" for easier differentiation. 
 
@@ -47,12 +48,13 @@ If none are given it will be using atribrary keys and no standardizer. Pytorch m
 
 ## Citation
 
-    @misc{bickmann2025exchangeai,
-        title={ExChanGeAI: An End-to-End Platform and Efficient Foundation Model for Electrocardiogram Analysis and Fine-tuning}, 
+    @misc{bickmann2026exchangeai,
+        title={End-to-End Platform for Electrocardiogram Analysis and Model Fine-Tuning: Development and Validation Study}, 
         author={Lucas Bickmann and Lucas Plagwitz and Antonius Büscher and Lars Eckardt and Julian Varghese},
-        year={2025},
-        eprint={2503.13570},
-        archivePrefix={arXiv},
-        primaryClass={cs.LG},
-        url={https://arxiv.org/abs/2503.13570}, 
+        year={2026},
+        journal={J Med Internet Res},
+        url={https://www.jmir.org/2026/1/e81116}, 
+        doi={10.2196/81116},
+        pages={e81116},
+        volume={28}
     }
